@@ -1,1 +1,9 @@
-[{"id":1,"description":"Buy groceries","status":"todo","createdAt":1760891247562,"updatedAt":1760891247562},{"id":2,"description":"Drink coffee","status":"todo","createdAt":1760891283984,"updatedAt":1760891283984}]
+[
+  {
+    "id": 1,
+    "description": "Do the dishes",
+    "status": "todo",
+    "createdAt": "2025-10-19",
+    "updatedAt": "2025-10-19"
+  }
+]
