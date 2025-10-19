@@ -45,16 +45,72 @@ readFile("tasks.json", "utf8", (err, data) => {
           break;
 
         case "list":
-          const allData = JSON.parse(data);
-          console.log(allData);
-          if (allData.length === 0) console.log("No tasks found.");
-          allData.forEach((task, index) => {
-            console.log(
-              `[${index + 1}] ${task.description} — ${task.status} (Created: ${
-                task.createdAt
-              })`
-            );
-          });
+          if (!argv[3]) {
+            const allData = JSON.parse(data);
+            console.log(allData);
+            if (allData.length === 0) console.log("No tasks found.");
+            allData.forEach((task, index) => {
+              console.log(
+                `[${index + 1}] ${task.description} — ${
+                  task.status
+                } (Created: ${task.createdAt})`
+              );
+            });
+          } else {
+            switch (argv[3]) {
+              case "todo":
+                const todoData = JSON.parse(data);
+                console.log(todoData);
+                if (todoData.length === 0)
+                  console.log("No tasks found with status: todo.");
+                todoData.forEach((task, index) => {
+                  if (task.status === "todo") {
+                    console.log(
+                      `[${index + 1}] ${task.description} — ${
+                        task.status
+                      } (Created: ${task.createdAt})`
+                    );
+                  }
+                });
+                break;
+              case "done":
+                const doneData = JSON.parse(data);
+                console.log(doneData);
+                if (doneData.length === 0)
+                  console.log("No tasks found with status: done.");
+                doneData.forEach((task, index) => {
+                  if (task.status === "done") {
+                    console.log(
+                      `[${index + 1}] ${task.description} — ${
+                        task.status
+                      } (Created: ${task.createdAt})`
+                    );
+                  }
+                });
+                break;
+              case "in-progress":
+                const inprogressData = JSON.parse(data);
+                console.log(inprogressData);
+                if (inprogressData.length === 0)
+                  console.log("No tasks found with status: in-progress.");
+                inprogressData.forEach((task, index) => {
+                  if (task.status === "in-progress") {
+                    console.log(
+                      `[${index + 1}] ${task.description} — ${
+                        task.status
+                      } (Created: ${task.createdAt})`
+                    );
+                  }
+                });
+                break;
+
+              default:
+                console.log(
+                  "Invalid status. Use one of: todo, in-progress, done"
+                );
+                break;
+            }
+          }
           break;
 
         default:

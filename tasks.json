@@ -5,5 +5,12 @@
     "status": "todo",
     "createdAt": "2025-10-19",
     "updatedAt": "2025-10-19"
+  },
+  {
+    "id": 2,
+    "description": "Learn backend",
+    "status": "in-progress",
+    "createdAt": "2025-10-19",
+    "updatedAt": "2025-10-19"
   }
 ]
