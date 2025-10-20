@@ -12,7 +12,6 @@ readFile("tasks.json", "utf8", (err, data) => {
     });
   } else {
     try {
-      console.log(data);
       switch (argv[2]) {
         case "add":
           const oldData = JSON.parse(data);
@@ -110,6 +109,40 @@ readFile("tasks.json", "utf8", (err, data) => {
                 );
                 break;
             }
+          }
+          break;
+
+        case "update":
+          const updatedData = JSON.parse(data);
+          const currentUpdatedDate = new Date();
+          const currentMonth = currentUpdatedDate.getMonth() + 1;
+          const currentYear = currentUpdatedDate.getFullYear();
+          const currentDay = currentUpdatedDate.getDate();
+          let found = false;
+          updatedData.forEach((task, index) => {
+            if (task.id === Number(argv[3])) {
+              found = true;
+              task = {
+                ...task,
+                description: argv[4],
+                updatedAt: `${currentYear}-${currentMonth}-${currentDay}`,
+              };
+              updatedData[index] = task;
+              writeFile(
+                "tasks.json",
+                `${JSON.stringify(updatedData)}`,
+                (err) => {
+                  if (err) {
+                    console.error("Error appending to file:", err);
+                    return;
+                  }
+                  console.log(`Task updated successfully (ID: ${task.id})`);
+                }
+              );
+            }
+          });
+          if (!found) {
+            console.log(`Task not found with ID: ${argv[3]}`);
           }
           break;
 

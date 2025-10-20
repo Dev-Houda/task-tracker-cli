@@ -1,16 +1,1 @@
-[
-  {
-    "id": 1,
-    "description": "Do the dishes",
-    "status": "todo",
-    "createdAt": "2025-10-19",
-    "updatedAt": "2025-10-19"
-  },
-  {
-    "id": 2,
-    "description": "Learn backend",
-    "status": "in-progress",
-    "createdAt": "2025-10-19",
-    "updatedAt": "2025-10-19"
-  }
-]
+[{"id":1,"description":"Continue Task tracker cli project","status":"todo","createdAt":"2025-10-19","updatedAt":"2025-10-20"},{"id":2,"description":"Learn backend","status":"in-progress","createdAt":"2025-10-19","updatedAt":"2025-10-19"}]
