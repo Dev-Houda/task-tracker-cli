@@ -146,6 +146,33 @@ readFile("tasks.json", "utf8", (err, data) => {
           }
           break;
 
+        case "delete":
+          const deleteData = JSON.parse(data);
+          const remainingTasks = [];
+          let idFound = false;
+          deleteData.forEach((task) => {
+            if (task.id !== Number(argv[3])) {
+              remainingTasks.push({ ...task });
+              writeFile(
+                "tasks.json",
+                `${JSON.stringify(remainingTasks)}`,
+                (err) => {
+                  if (err) {
+                    console.error("Error appending to file:", err);
+                    return;
+                  }
+                }
+              );
+            } else if (task.id === Number(argv[3])) {
+              idFound = true;
+            }
+          });
+          if (idFound) {
+            console.log(`Task deleted successfully (ID: ${argv[3]})`);
+          }
+
+          break;
+
         default:
           console.log("Unknown command!");
           break;
