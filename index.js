@@ -12,41 +12,32 @@ readFile("tasks.json", "utf8", (err, data) => {
     });
   } else {
     try {
+      const allData = JSON.parse(data);
+      const currentDate = new Date();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      const day = currentDate.getDate();
       switch (argv[2]) {
         case "add":
-          const oldData = JSON.parse(data);
-          const currentDate = new Date();
-          const month = currentDate.getMonth() + 1;
-          const year = currentDate.getFullYear();
-          const day = currentDate.getDate();
-          console.log(oldData);
-          console.log("creating new task object");
-          console.log(argv[3]);
           const newTask = {
-            id: oldData.length + 1,
+            id: allData.length + 1,
             description: argv[3],
             status: "todo",
             createdAt: `${year}-${month}-${day}`,
             updatedAt: `${year}-${month}-${day}`,
           };
-          console.log(newTask);
-          console.log("pushing to data");
-          oldData.push(newTask);
-          console.log("writing to file");
-          writeFile("tasks.json", `${JSON.stringify(oldData)}`, (err) => {
+          allData.push(newTask);
+          writeFile("tasks.json", `${JSON.stringify(allData)}`, (err) => {
             if (err) {
               console.error("Error appending to file:", err);
               return;
             }
             console.log(`Task added successfully (ID: ${newTask.id})`);
-            console.log(oldData);
           });
           break;
 
         case "list":
           if (!argv[3]) {
-            const allData = JSON.parse(data);
-            console.log(allData);
             if (allData.length === 0) console.log("No tasks found.");
             allData.forEach((task, index) => {
               console.log(
@@ -58,11 +49,9 @@ readFile("tasks.json", "utf8", (err, data) => {
           } else {
             switch (argv[3]) {
               case "todo":
-                const todoData = JSON.parse(data);
-                console.log(todoData);
-                if (todoData.length === 0)
+                if (allData.length === 0)
                   console.log("No tasks found with status: todo.");
-                todoData.forEach((task, index) => {
+                allData.forEach((task, index) => {
                   if (task.status === "todo") {
                     console.log(
                       `[${index + 1}] ${task.description} — ${
@@ -73,26 +62,24 @@ readFile("tasks.json", "utf8", (err, data) => {
                 });
                 break;
               case "done":
-                const doneData = JSON.parse(data);
-                console.log(doneData);
-                if (doneData.length === 0)
+                if (allData.length === 0) {
                   console.log("No tasks found with status: done.");
-                doneData.forEach((task, index) => {
-                  if (task.status === "done") {
-                    console.log(
-                      `[${index + 1}] ${task.description} — ${
-                        task.status
-                      } (Created: ${task.createdAt})`
-                    );
-                  }
-                });
+                } else {
+                  allData.forEach((task, index) => {
+                    if (task.status === "done") {
+                      console.log(
+                        `[${index + 1}] ${task.description} — ${
+                          task.status
+                        } (Created: ${task.createdAt})`
+                      );
+                    }
+                  });
+                }
                 break;
               case "in-progress":
-                const inprogressData = JSON.parse(data);
-                console.log(inprogressData);
-                if (inprogressData.length === 0)
+                if (allData.length === 0)
                   console.log("No tasks found with status: in-progress.");
-                inprogressData.forEach((task, index) => {
+                allData.forEach((task, index) => {
                   if (task.status === "in-progress") {
                     console.log(
                       `[${index + 1}] ${task.description} — ${
@@ -113,32 +100,23 @@ readFile("tasks.json", "utf8", (err, data) => {
           break;
 
         case "update":
-          const updatedData = JSON.parse(data);
-          const currentUpdatedDate = new Date();
-          const currentMonth = currentUpdatedDate.getMonth() + 1;
-          const currentYear = currentUpdatedDate.getFullYear();
-          const currentDay = currentUpdatedDate.getDate();
           let found = false;
-          updatedData.forEach((task, index) => {
+          allData.forEach((task, index) => {
             if (task.id === Number(argv[3])) {
               found = true;
               task = {
                 ...task,
                 description: argv[4],
-                updatedAt: `${currentYear}-${currentMonth}-${currentDay}`,
+                updatedAt: `${year}-${month}-${day}`,
               };
-              updatedData[index] = task;
-              writeFile(
-                "tasks.json",
-                `${JSON.stringify(updatedData)}`,
-                (err) => {
-                  if (err) {
-                    console.error("Error appending to file:", err);
-                    return;
-                  }
-                  console.log(`Task updated successfully (ID: ${task.id})`);
+              allData[index] = task;
+              writeFile("tasks.json", `${JSON.stringify(allData)}`, (err) => {
+                if (err) {
+                  console.error("Error appending to file:", err);
+                  return;
                 }
-              );
+                console.log(`Task updated successfully (ID: ${task.id})`);
+              });
             }
           });
           if (!found) {
